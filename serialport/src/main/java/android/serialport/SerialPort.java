@@ -53,6 +53,10 @@ public final class SerialPort {
         sSuPath = suPath;
     }
 
+    public static void clrSuPath() {
+        sSuPath = null;
+    }
+
     /**
      * Get the su binary path
      *
@@ -96,11 +100,17 @@ public final class SerialPort {
         if (!device.canRead() || !device.canWrite()) {
             try {
                 /* Missing read/write permission, trying to chmod the file */
-                Process su;
-                su = Runtime.getRuntime().exec(sSuPath);
                 String cmd = "chmod 666 " + device.getAbsolutePath() + "\n" + "exit\n";
-                su.getOutputStream().write(cmd.getBytes());
-                if ((su.waitFor() != 0) || !device.canRead() || !device.canWrite()) {
+
+                Process p;
+                if(sSuPath != null) {
+                    p = Runtime.getRuntime().exec(sSuPath);
+                    p.getOutputStream().write(cmd.getBytes());
+                }
+                else {
+                    p = Runtime.getRuntime().exec(cmd);
+                }
+                if ((p.waitFor() != 0) || !device.canRead() || !device.canWrite()) {
                     throw new SecurityException();
                 }
             } catch (Exception e) {
