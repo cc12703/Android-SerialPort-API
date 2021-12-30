@@ -1,8 +1,13 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
 
+group = 'com.github.cc12703'
+version = rootProject.ext.versionName
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
+
+    ndkVersion '21.0.6113669'
 
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
@@ -37,5 +42,5 @@ dependencies {
     api "androidx.annotation:annotation:1.1.0"
 }
 
-apply from: '../maven_publish.gradle'
+//apply from: '../maven_publish.gradle'
 
